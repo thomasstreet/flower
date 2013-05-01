@@ -11,6 +11,7 @@
 <script>
   angular.module('flowers-client', ['slider'])
     .controller('app', function($scope, $http) {
+      $scope.speed = 0;
       $scope.postSpeed = function() {
         $http.put('/set/' + $scope.speed)
       }
@@ -19,12 +20,28 @@
 
 <style>
   input { width: 100%; }
+  .top { margin-top: 100pt; }
+  .slider-container {
+    margin-top: 1pt;
+  }
+  .ui-slider-range {
+    background-color: #F1C40F;
+  }
+  .ui-slider-handle {
+    background-color: #F39C12;
+  }
+  .ui-slider-handle:hover, .ui-slider-handle:active, .ui-slider-handle:focus {
+    background-color: rgb(253, 204, 8) ! important;
+  }
 </style>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="span6 offset3" ng-app="flowers-client" ng-controller="app">
+<div class="container-fluid" ng-app="flowers-client" ng-controller="app">
+  <div class="row top">
+    <div class="span6 offset3 slider-container">
       <slider min=0 max=10 type="range" ng-model="speed" ng-change="postSpeed()" />
+    </div>
+    <div class="span1">
+      {{speed}}
     </div>
   </div>
 </div>
