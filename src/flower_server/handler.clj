@@ -13,10 +13,11 @@
 
 
 (defroutes app-routes
-  (GET "/set/:rpms" [rpms]
+  (PUT "/set/:rpms" [rpms]
        (do
+         (prn (str "New speed: " (read-string rpms)))
          (reset! speed (read-string rpms))
-         (str "New speed: " rpms)))
+         "ok"))
   (route/resources "/")
   (route/not-found "Not Found"))
 
