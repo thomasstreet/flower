@@ -5,12 +5,14 @@
             [compojure.route :as route]))
 
 (def speed (atom 40))
-(def board (init-board))
-(def flower (future (tick (partial move-to board) (positions speed) 1)))
+(try
+  (def board (init-board))
+  (def flower (future (tick (partial move-to board) (positions speed) 1)))
+  (catch Exception e))
+
 
 
 (defroutes app-routes
-  (GET "/" [] "hello world!")
   (GET "/set/:rpms" [rpms]
        (do
          (reset! speed (read-string rpms))
