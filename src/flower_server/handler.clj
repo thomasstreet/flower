@@ -2,7 +2,8 @@
   (:use compojure.core)
   (:use flower-server.flowers)
   (:require [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [ring.util.response :as response]))
 
 (def speed (atom 40))
 (try
@@ -13,6 +14,7 @@
 
 
 (defroutes app-routes
+  (GET "/" [] (response/redirect "/index.html"))
   (PUT "/set/:rpms" [rpms]
        (do
          (prn (str "New speed: " (read-string rpms)))
