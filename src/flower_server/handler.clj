@@ -5,11 +5,10 @@
             [compojure.route :as route]
             [ring.util.response :as response]))
 
-(def speed (atom 40))
-(try
+(def speed (atom 0))
+(do
   (def board (init-board))
-  (def flower (future (tick (partial move-to board) (positions speed) 1)))
-  (catch Exception e))
+  (def flower (future (tick (partial move-to board) (positions speed) 1))))
 
 
 
