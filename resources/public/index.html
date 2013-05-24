@@ -11,9 +11,11 @@
 <script>
   angular.module('flowers-client', ['slider'])
     .controller('app', function($scope, $http) {
-      $scope.speed = 0;
-      $scope.postSpeed = function() {
-        $http.put('/set/' + $scope.speed)
+      $scope.speeds = [{value: 0}, {value: 0}, {value: 0}, {value: 0}, 
+                       {value: 0}, {value: 0}, {value: 0}, {value: 0}];
+      $scope.postSpeed = function(pin) {
+        console.log('speeds', _($scope.speeds).pluck('value').toString());
+        $http.put('/' + pin + '/' + $scope.speeds[pin].value)
       }
     }) 
 </script>
@@ -36,12 +38,14 @@
 </style>
 
 <div class="container-fluid" ng-app="flowers-client" ng-controller="app">
-  <div class="row top">
-    <div class="span6 offset3 slider-container">
-      <slider min=0 max=30 type="range" ng-model="speed" ng-change="postSpeed()" />
-    </div>
-    <div class="span1">
-      {{speed}}
+  <div class="row" ng-repeat="($index, speed) in speeds">
+    <div class="span1 offset2">{{$index + 2}}</div>
+      <div class="span6 slider-container">
+        <slider min=0 max=30 type="range" ng-model="speed.value" ng-change="postSpeed($index)" />
+      </div>
+      <div class="span1">
+        {{speed.value}}
+      </div>
     </div>
   </div>
 </div>

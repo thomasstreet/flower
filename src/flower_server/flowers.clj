@@ -22,14 +22,15 @@
     (Thread/sleep ms)
     (f x)))
 
-(def servo-pin 2)
+(def servo-pins (range 2 10))
 
 (defn move-to
-  [board pos]
-  (analog-write board servo-pin (int pos)))
+  [board pin pos]
+  (analog-write board pin (int pos)))
 
 (defn init-board []
   (let [board (arduino :firmata "/dev/tty.usbserial-A6008j80")]
-    (pin-mode board servo-pin SERVO)
+    (doseq [pin servo-pins]
+      (pin-mode board pin SERVO))
     board))
 
