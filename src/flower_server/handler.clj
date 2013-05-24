@@ -5,7 +5,7 @@
             [compojure.route :as route]
             [ring.util.response :as response]))
 
-(def speeds (repeat 8 (atom 0)))
+(def speeds (repeatedly 8 #(atom 0)))
 
 (defn start-ticking
   [board nth_pin]
@@ -22,8 +22,9 @@
   (GET "/" [] (response/redirect "/index.html"))
   (PUT "/:pin/:rpms" [pin rpms]
        (do
-         (prn (str "New speed for motor" (read-string pin) ":" (read-string rpms)))
+         (prn (str "New speed for motor" (read-string pin) " : " (read-string rpms)))
          (reset! (nth speeds (read-string pin)) (read-string rpms))
+         (prn "speed atoms" (map deref speeds))
          "ok"))
   (route/resources "/")
   (route/not-found "Not Found"))
