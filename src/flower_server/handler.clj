@@ -7,16 +7,9 @@
 
 (def speeds (repeatedly 8 #(atom 0)))
 
-(defn start-ticking
-  [board nth_pin]
-  (future
-    (tick
-     (partial move-to board (+ 2 nth_pin)) (positions (nth speeds nth_pin)))))
+(def board (init-board))
 
-(do
-  (def board (init-board))
-  (def flowers
-    (map (partial start-ticking board) (range 8))))
+(start-ticking board (apply (partial map vector) (map positions speeds)))
 
 (defroutes app-routes
   (GET "/" [] (response/redirect "/index.html"))
