@@ -1,5 +1,5 @@
 (ns flower-server.flowers
-  (:use :reload-all clodiuno.core)
+  (:use serial-port)
   (:use :reload-all clodiuno.firmata))
 
 (defn steps
@@ -14,7 +14,7 @@
     position
     (+ 180 (- 180 position))))
 
-(def positions (comp (partial map #(-> % (mod 360) (fold) )) distances))
+(def positions (comp (partial map #(-> % (mod 360) (fold))) distances))
 
 (defn tick
   [f seq ms]
@@ -24,30 +24,25 @@
 
 (def servo-pins (range 2 10))
 
-(defn move-to
-  [board pin pos]
-    (analog-write board pin (int pos)))
-
 (defn indexed
   [coll]
   (map vector (iterate inc 0) coll))
 
 (defn move-all
-  [board position-vector]
-  (doseq [[idx pos] (indexed position-vector)]
-    (move-to board (+ idx 2) pos)))
-
-(defn init-board []
-  (let [board (arduino :firmata "/dev/tty.usbserial-A6008j80")]
-    (doseq [pin servo-pins]
-      (pin-mode board pin SERVO))
-    board))
+  [port position-vector]
+  (let [message (str "["
+                     (clojure.string/join "," (concat position-vector))
+                     "]"
+                     )
+        message-as-bytes (byte-array (map byte message))]
+    (prn (str "Sending " message-as-bytes))
+    (write port message-as-bytes)))
 
 (defn start-ticking
-  [board position-vector]
+  [port position-vector]
   (future
     (tick
-     (partial move-all board)
+     (partial move-all port)
      position-vector
      0)))
 

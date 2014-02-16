@@ -1,15 +1,17 @@
 (ns flower-server.handler
   (:use compojure.core)
+  (:use serial-port)
   (:use flower-server.flowers)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [ring.util.response :as response]))
 
-(def speeds (repeatedly 8 #(atom 0)))
+(def speeds (repeatedly 6 #(atom 0)))
 
-(def board (init-board))
+(def port (open "/dev/tty.usbmodem1411"))
+(on-byte port #(prn (char %)))
 
-(start-ticking board (apply (partial map vector) (map positions speeds)))
+(start-ticking port (apply (partial map vector) (map positions speeds)))
 
 (defroutes app-routes
   (GET "/" [] (response/redirect "/index.html"))
