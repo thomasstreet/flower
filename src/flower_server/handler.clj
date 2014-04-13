@@ -6,7 +6,7 @@
             [compojure.route :as route]
             [ring.util.response :as response]))
 
-(def speeds (repeatedly 6 #(atom 0)))
+(def speeds (repeatedly 8 #(atom 0)))
 
 (def port (open "/dev/tty.usbmodem1411"))
 (on-byte port #(prn (char %)))

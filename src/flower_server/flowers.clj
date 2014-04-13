@@ -31,11 +31,11 @@
 (defn move-all
   [port position-vector]
   (let [message (str "["
-                     (clojure.string/join "," (concat position-vector))
+                     (clojure.string/join "," (concat (map int position-vector)))
                      "]"
                      )
         message-as-bytes (byte-array (map byte message))]
-    (prn (str "Sending " message-as-bytes))
+
     (write port message-as-bytes)))
 
 (defn start-ticking
@@ -44,7 +44,7 @@
     (tick
      (partial move-all port)
      position-vector
-     0)))
+     10)))
 
 
 
