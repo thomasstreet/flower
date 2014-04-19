@@ -1,6 +1,4 @@
-(ns flower-server.flowers
-  (:use serial-port)
-  (:use :reload-all clodiuno.firmata))
+(ns flower-server.flowers)
 
 (defn steps
   [speed-atom]
@@ -28,23 +26,20 @@
   [coll]
   (map vector (iterate inc 0) coll))
 
-(defn move-all
-  [port position-vector]
-  (let [message (str "["
-                     (clojure.string/join "," (concat (map int position-vector)))
-                     "]"
-                     )
-        message-as-bytes (byte-array (map byte message))]
 
-    (write port message-as-bytes)))
+(defn format-message
+  [v]
+  (str "["
+        (clojure.string/join "," (concat (map int v)))
+        "]"))
 
 (defn start-ticking
-  [port position-vector]
+  [position-vector]
   (future
     (tick
-     (partial move-all port)
+     #(println (format-message %))
      position-vector
-     10)))
+     100)))
 
 
 
