@@ -27,19 +27,24 @@
   (map vector (iterate inc 0) coll))
 
 
+
+
+
 (defn format-message
   [v]
   (str "["
-        (clojure.string/join "," (concat (map int v)))
+        (clojure.string/join "," (concat (map #(int (* 180 %)) v)))
         "]"))
 
 (defn start-ticking
-  [position-vector]
+  [write-to position-vector]
   (future
     (tick
-     #(println (format-message %))
+     (fn [m]
+
+         (println (format-message m)))
      position-vector
-     100)))
+     10)))
 
 
 

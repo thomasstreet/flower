@@ -1,3 +1,6 @@
+(ns flower-server.comms
+  (:use clojure.java.io))
+
 (def boards {
              :A [:flower :flower :flower :flower :flower :flower
                  :vine :vine :vine :flower]
@@ -11,5 +14,5 @@
              })
 
 (def writers {
-              :A (writer "/tmp/tty.usbmodem1411")
+
               })

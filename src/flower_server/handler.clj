@@ -1,6 +1,7 @@
 (ns flower-server.handler
   (:use compojure.core)
   (:use flower-server.positions)
+  (:use flower-server.comms)
   (:use flower-server.flowers)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
@@ -9,7 +10,9 @@
 
 (def speeds (repeatedly 8 #(atom 0)))
 
-(start-ticking (apply (partial map vector) (map positions speeds)))
+(start-ticking (writers :A)
+               (apply (partial map vector) [(flower) (flower) (flower) (flower)
+                                            (vine)   (flower) (flower) (flower)]))
 
 (def seconds (* 12 60 60))
 
