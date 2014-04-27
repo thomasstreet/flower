@@ -2,11 +2,11 @@
 
 (def transition-time (* 60 5))
 
-(def open-min (* 20 60))
+(def open-min (* 30 60))
 (def open-max (* 120 60))
 
-(def closed-min (* 5 60))
-(def closed-max (* 20 60))
+(def closed-min (* 30 60))
+(def closed-max (* 120 60))
 
 
 (defn open
@@ -29,13 +29,15 @@
   []
   (map #(apply % []) (cycle [open restOpen close restClosed])))
 
-
 (defn pop-first [x]
+  "[[1 2] [3 4]] => [[2] [3 4]]
+   [[2] [3 4]] => [[3 4]]"
   (if (first (rest (first x)))
     (cons (rest (first x)) (rest x))
     (next x)))
 
 (defn cat
+  "Concat that takes a lazy seq of lazy seqs"
   [c]
   (map #(first (first %)) (iterate pop-first c)))
 
