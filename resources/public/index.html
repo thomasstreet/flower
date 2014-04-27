@@ -11,42 +11,134 @@
 <script>
   angular.module('flowers-client', ['slider'])
     .controller('app', function($scope, $http) {
-      $scope.speeds = [{value: 0}, {value: 0}, {value: 0}, {value: 0}, 
-                       {value: 0}, {value: 0}, {value: 0}, {value: 0}];
-      $scope.postSpeed = function(pin) {
-        console.log('speeds', _($scope.speeds).pluck('value').toString());
-        $http.put('/' + pin + '/' + $scope.speeds[pin].value)
+
+      $scope.path = function(points) {
+        var path = "";
+        for( var i = 0, len = points.length; i < len; i++ ){
+          path += (i && "L" || "M") + points[i].join(",");
+        }
+        return path;
       }
+
+      $scope.points = function(values) {
+        var l = values.length - 1;
+        return _.map(values, function(v, i) {
+          return [(i/l) * $scope.width, $scope.height - ((v * $scope.height * 0.6) + $scope.height*0.2)]
+        });
+      };
+
+      $scope.totalPoints = function() {
+        var t = $scope.total();
+        var l = t.length - 1;
+        console.log("max total", _.max(t));
+        return _.map(t, function(v, i) {
+          return [(i/l) * $scope.width,  $scope.height - (v / 5) * $scope.height];
+        });
+      };
+
+      var sum = function(a) {
+        return _.reduce(a, function(a, b){ return a + b;});
+      };
+
+      $scope.total = function() {
+        return _.map(_.zip.apply(_, _.values($scope.fns)), sum)
+      };
+
+
+      $scope.width = 1200;
+      $scope.height = 40;
+
+      $scope.nFns = 0;
+
+      $scope.fns = {}
+      $http.get("/fns").success(function(data) {
+        $scope.fns = data;
+        window.fns = $scope.fns;
+        window.total = $scope.total();
+        $scope.nFns = _.values(data).length;
+
+        var n = $scope.fns[_.keys($scope.fns)[0]].length;
+        $scope.averageOpen = sum($scope.total()) / n;
+      });
+
+      $scope._ = _;
+
+      
+
     }) 
 </script>
 
 <style>
-  input { width: 100%; }
-  .top { margin-top: 100pt; }
-  .slider-container {
-    margin-top: 1pt;
+  body{
+    background-color: #FFFFFA;
   }
-  .ui-slider-range {
-    background-color: #F1C40F;
+
+  .main {
+    margin-top: 50pt;
   }
-  .ui-slider-handle {
-    background-color: #F39C12;
+
+  .total {
+    margin-top: 20pt;
   }
-  .ui-slider-handle:hover, .ui-slider-handle:active, .ui-slider-handle:focus {
-    background-color: rgb(253, 204, 8) ! important;
+
+  .stats {
+    margin-top: 30pt;
+    font-size: 20pt;
+  }
+
+  .stat {
+    text-align: right;
   }
 </style>
 
-<div class="container-fluid" ng-app="flowers-client" ng-controller="app">
-  <div class="row" ng-repeat="($index, speed) in speeds">
-    <div class="span1 offset2">{{$index + 2}}</div>
-      <div class="span6 slider-container">
-        <slider min=0 max=30 type="range" ng-model="speed.value" ng-change="postSpeed($index)" />
+<div class="main container-fluid" ng-app="flowers-client" ng-controller="app">
+
+  <div class="row" ng-repeat="(key, value) in fns">
+    <div class="span1 offset0">
+      {{key}}
+    </div>
+
+    <div class="span9">
+      <svg width="{{width}}" height="{{height}}">
+        <rect x="0" y="0" width="100%" height="100%" fill="#EEEEE9"/>
+        <path stroke="black" fill="none" d="{{path(points(value))}}" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="row total">
+    <div class="span1 offset0">
+      Total
+    </div>
+
+    <div class="span9">
+      <svg width="{{width}}" height="{{height}}">
+        <rect x="0" y="0" width="100%" height="100%" fill="#EEEEE9"/>
+        <line ng-repeat="i in _.range(nFns)" x1="0" y1="{{height - i * (height / nFns)}}" x2="100%" y2="{{height - i * (height / nFns)}}"
+        stroke="#FFFFFA" />
+        <path stroke="black" fill="none" d="{{path(totalPoints(total()))}}" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="stats">
+
+    <div class="row">
+      <div class="span2 offset3">
+        Total Flowers
       </div>
-      <div class="span1">
-        {{speed.value}}
+      <div class="span1 stat">
+        {{nFns}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="span2 offset3">
+        Average Open
+      </div>
+      <div class="span1 stat">
+        {{averageOpen.toFixed(2)}}
       </div>
     </div>
   </div>
 </div>
-
