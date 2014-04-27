@@ -41,7 +41,10 @@
       };
 
       $scope.total = function() {
-        return _.map(_.zip.apply(_, _.values($scope.fns)), sum)
+        var flowers = _.filter($scope.fns, function(v, k) {
+          return k.indexOf("flower") > -1;
+        });
+        return _.map(_.zip.apply(_, flowers), sum)
       };
 
 

@@ -28,6 +28,11 @@
          :flower4 (take seconds (flower))
          :flower5 (take seconds (flower))
          :flower6 (take seconds (flower))
+         :vine1   (take seconds (vine))
+         :vine2   (take seconds (vine))
+         :vine3   (take seconds (vine))
+         
+
          
 
          }))
