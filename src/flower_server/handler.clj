@@ -11,7 +11,7 @@
 
 (start-ticking (apply (partial map vector) (map positions speeds)))
 
-(def seconds (* 24 60 60))
+(def seconds (* 12 60 60))
 
 (defroutes app-routes
   (GET "/" [] (response/redirect "/index.html"))
@@ -26,6 +26,9 @@
          :flower2 (take seconds (flower))
          :flower3 (take seconds (flower))
          :flower4 (take seconds (flower))
+         :flower5 (take seconds (flower))
+         :flower6 (take seconds (flower))
+         
 
          }))
   
