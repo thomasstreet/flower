@@ -10,9 +10,19 @@
 
 (def speeds (repeatedly 8 #(atom 0)))
 
-(start-ticking (writers :A)
-               (apply (partial map vector) [(flower) (flower) (flower) (flower)
-                                            (vine)   (flower) (flower) (flower)]))
+(defn transpose [x] (apply (partial map vector) x))
+
+
+(quote (map (fn [x]
+       (start-ticking (writers x)
+                      (transpose [(flower) (flower) (flower) (flower)
+                                  (flower)   (flower) (flower) (flower)])))
+     [:A :B :C] )) 
+
+(start-ticking (writers :C)
+               (transpose [(flower) (flower) (flower) (flower)
+                           (flower)   (flower) (flower) (flower)]))
+
 
 (def seconds (* 12 60 60))
 

@@ -1,3 +1,4 @@
+
 (ns flower-server.comms
   (:use clojure.java.io))
 
@@ -15,4 +16,6 @@
 
 (def writers {
 
+
+              :C (writer "/dev/cu.usbmodem1d1141")
               })

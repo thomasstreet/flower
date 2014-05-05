@@ -1,13 +1,13 @@
 (ns flower-server.positions)
 
 (def transition-time (* 60 5))
-(def vine-transition-time 30)
+(def vine-transition-time 10)
 
-(def open-min (* 30 60))
-(def open-max (* 120 60))
+(def open-min (* 1 60))
+(def open-max (* 1 60))
 
-(def closed-min (* 30 60))
-(def closed-max (* 120 60))
+(def closed-min (* 1 60))
+(def closed-max (* 1 60))
 
 (def vine-rest-min (* 5 60))
 (def vine-rest-max (* 15 60))

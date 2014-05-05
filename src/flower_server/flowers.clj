@@ -38,13 +38,15 @@
 
 (defn start-ticking
   [write-to position-vector]
+  (println (str "ticking to " write-to))
   (future
     (tick
      (fn [m]
+       (binding [*out* write-to]
 
-         (println (format-message m)))
+         (println (format-message m))))
      position-vector
-     10)))
+     1000)))
 
 
 
