@@ -13,9 +13,12 @@
              :E [:flower :flower :vine :vine :vine :vine :vine]
              :F [:flower :flower :flower :vine]
              })
-
+(quote
 (def writers {
 
-
-              :C (writer "/dev/cu.usbmodem1d1141")
+              :A (writer "/dev/cu.usbmodem1a1221")
+              :C (writer "/dev/cu.usbmodem1d1131")
+              :D (writer "/dev/cu.usbmodem1d1141")
+              :E (writer "/dev/cu.usbmodem1d1111")
               })
+)
