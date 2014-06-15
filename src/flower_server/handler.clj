@@ -15,13 +15,26 @@
 
 (quote (map (fn [x]
        (start-ticking (writers x)
-                      (transpose [(flower) (flower) (flower) (flower)
-                                  (flower)   (flower) (flower) (flower)])))
+                      (transpose [(flower) (flower) (flower) (flower) (flower)
+                                  (flower) (flower) (flower) (flower) (flower)])))
      [:A :B :C] )) 
 
+(quote
+(start-ticking (writers :B)
+               (transpose [(flower) (flower) (flower) (flower) (flower)
+                           (flower) (flower) (flower) (flower) (flower)]))
+
 (start-ticking (writers :C)
-               (transpose [(flower) (flower) (flower) (flower)
-                           (flower)   (flower) (flower) (flower)]))
+               (transpose [(flower) (flower) (flower) (flower) (flower)
+                           (flower) (flower) (flower) (flower) (flower)]))
+(start-ticking (writers :D)
+               (transpose [(flower) (flower) (flower) (flower) (flower)
+                           (flower) (flower) (flower) (flower) (flower)]))
+
+(start-ticking (writers :E)
+               (transpose [(flower) (flower) (flower) (flower) (flower)
+                           (flower) (flower) (flower) (flower) (flower)]))
+)
 
 
 (def seconds (* 12 60 60))
